@@ -7,10 +7,9 @@ import java.net.Socket;
 
 public class ServerThread extends Thread
 {
-	Socket connection = null;
-	Server server = null;
-	
-	String clientName;
+	Socket connection	= null;
+	Server server		= null;
+	String clientName	= null;
 	
 	public ServerThread(Server server, Socket connection)
 	{
@@ -22,7 +21,7 @@ public class ServerThread extends Thread
 	@Override
 	public void run()
 	{
-		super.run();
+		super.run();	
 		
 		try
 		{
@@ -39,28 +38,24 @@ public class ServerThread extends Thread
 				String inputDataStr = inData.readUTF();
 				System.out.println(inputDataStr);
 
-				if(inputDataStr.equals("[" + clientName + "]: exit"))
-					break;
-				
 				// Output incoming data to all clients:
 				for(Socket c : server.connections)
 				{
 					if(c.isConnected())
 					{
-						System.out.println("Envio a puerto: " + c.getPort());
+						//System.out.println("Envio a puerto: " + c.getPort());
 						DataOutputStream outData = new DataOutputStream(c.getOutputStream());
 						outData.writeUTF(inputDataStr);
 					}
-					
 				}
-				
 			}
 			server.notifyConnectionClose(connection);
 		}
-		catch(IOException ex)
+		catch(IOException ex)	// Connection closed
 		{
-			System.out.println("Error en ServerThread al mandar mensages");
-			ex.printStackTrace();
+			server.notifyConnectionClose(connection);
+			//System.out.println("Error en ServerThread al mandar mensages");
+			//ex.printStackTrace();
 			
 		}
 		

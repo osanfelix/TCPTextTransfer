@@ -44,7 +44,7 @@ public final class Server
 		}
 		catch(Exception ex)
 		{
-			System.out.println("Notificación de conexión ya cerrada.");
+			System.out.println("Conexión cerrada por el cliente.");
 		}
 	}
 	

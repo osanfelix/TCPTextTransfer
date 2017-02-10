@@ -8,8 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.DataInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 
@@ -32,7 +30,7 @@ public class Client extends JFrame implements ActionListener, Runnable
 	public Client(String name, int port)
 	{
 		// GUI issues
-		super("CLIENTE CHAT");
+		super("CLIENTE CHAT: " + name);
 		setLayout(null);
 		
 		message.setBounds(10, 10, 400, 30);add(message);
@@ -56,7 +54,7 @@ public class Client extends JFrame implements ActionListener, Runnable
 		try
 		{
 			// Get Connection
-			connection = new Socket("localhost", port);
+			connection = new Socket("localhost", port);		// Try ip addres: like "192.168.0.34",...
 			
 			// Outgoing data to server
 			outData =  new DataOutputStream(connection.getOutputStream());
@@ -86,8 +84,8 @@ public class Client extends JFrame implements ActionListener, Runnable
 			}
 			catch (IOException e)
 			{
-				System.out.println("Error al recibir mesajes");
-				e.printStackTrace(System.out);
+				System.out.println("Conexión cerrada por el cliente/servidor");
+				//e.printStackTrace(System.out);
 		}
 		}
 	}
@@ -103,8 +101,6 @@ public class Client extends JFrame implements ActionListener, Runnable
 				String text = "[" + name + "]: " + message.getText();
 				message.setText("");
 				outData.writeUTF(text);
-				
-				
 			}
 			catch (IOException ex)
 			{
@@ -117,7 +113,6 @@ public class Client extends JFrame implements ActionListener, Runnable
 			try
 			{
 				exit = true;
-				outData.writeUTF("exit");
 				outData.close();
 				connection.close();
 				dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
